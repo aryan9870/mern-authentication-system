@@ -1,17 +1,10 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
-import express, { urlencoded } from 'express';
+import express from 'express';
 const app = express();
-
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-
 import connectDB from './config/db.js';
-import ExpressError from './ulils/ExpressError.js';
-
+import ExpressError from './utils/ExpressError.js';
 import authRouter from "./routes/authRoutes.js";
-
 
 const PORT = process.env.PORT || 5000;
 
@@ -23,11 +16,9 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+app.get('/', (re, res) => {
+    res.send("Welcome to root");
+})
 
 app.use('/api/auth/', authRouter);
 

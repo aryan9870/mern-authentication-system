@@ -1,8 +1,9 @@
-import asyncWrap from "../ulils/asyncWrap.js";
+import asyncWrap from "../utils/asyncWrap.js";
 import User from "../models/userSchema.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import ExpressError from "../ulils/ExpressError.js";
+import ExpressError from "../utils/ExpressError.js";
+import sendMail from "../config/nodemailer.js";
 
 
 const register = asyncWrap(async (req, res, next) => {
@@ -35,6 +36,10 @@ const register = asyncWrap(async (req, res, next) => {
 
     // Generate JWT token
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+
+    // Send mail 
+
+    sendMail(email, 'Welcome to my app', `Welcome to my mern-authentiction app. Your account has been created with email id: ${email}`);
 
     // send response with token in cookie
     res.status(201).cookie("token", token, {
