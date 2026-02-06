@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { register, login, logout, sendVerifyOtp, verifyEmail, sendResetOtp, resetPassword } from '../cantrollers/authCantroller.js'
+import { register, login, logout, sendVerifyOtp, verifyEmail, sendResetOtp, resetPassword } from '../controllers/authController.js'
 import isLoggedIn from '../middleware/userAuth.js';
 
 router.post('/register', register);

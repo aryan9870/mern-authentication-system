@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import connectDB from './config/db.js';
 import ExpressError from './utils/ExpressError.js';
 import authRouter from "./routes/authRoutes.js";
+import userRouter from "./routes/userRoutes.js"
 
 const PORT = process.env.PORT || 5000;
 
@@ -21,6 +22,7 @@ app.get('/', (re, res) => {
 })
 
 app.use('/api/auth/', authRouter);
+app.use('/api/user/', userRouter);
 
 // 404 Not Found handler
 app.use((req, res, next) => {
