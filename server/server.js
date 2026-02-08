@@ -12,7 +12,9 @@ const PORT = process.env.PORT || 5000;
 
 connectDB();
 
-app.use(cors());
+const allowedOrigins = ['http://localhost:5173']
+
+app.use(cors({origin: allowedOrigins, credentials: true}));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -36,7 +38,7 @@ app.use((err, req, res, next) => {
     // Set default status code and message if not provided
     const statusCode = err.statusCode || 500;
     const message = err.message || "Internal Server Error";
-    res.status(statusCode).json({ error: message });
+    res.status(statusCode).json({  message: message, success: false });
 });
 
 

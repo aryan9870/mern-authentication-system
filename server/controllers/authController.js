@@ -59,6 +59,7 @@ const register = asyncWrap(async (req, res, next) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     })
     .json({
+      success: true,
       message: "User registered successfully",
       user: {
         id: newUser._id,
@@ -105,6 +106,7 @@ const login = asyncWrap(async (req, res, next) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     })
     .json({
+      success: true,
       message: "User logged in successfully",
       user: {
         id: user._id,
