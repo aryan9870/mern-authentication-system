@@ -4,10 +4,12 @@ import { assets } from "../assets/assets";
 import { data, useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
+import { AlertContext } from "../context/AlertContext";
 
 const Login = () => {
   const { isLoggedin, setIsLoggedin, backendUrl, getAuthenticatedUser } =
     useContext(AppContext);
+  const { showAlert } = useContext(AlertContext);
   const navigate = useNavigate();
 
   const [state, setState] = useState("Sign up");
@@ -37,6 +39,7 @@ const Login = () => {
           await setIsLoggedin(true);
           await getAuthenticatedUser();
           navigate("/");
+          showAlert("success", "Welcome to my mern-auth app!");
         }
       } else {
         // User Login
@@ -49,10 +52,11 @@ const Login = () => {
           await setIsLoggedin(true);
           await getAuthenticatedUser();
           navigate("/");
+          showAlert("success", "Login successful 🎉");
         }
       }
     } catch (error) {
-      alert(error?.response?.data?.message);
+      showAlert("danger", error.response.data.message);
     }
   };
 

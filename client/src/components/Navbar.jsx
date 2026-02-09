@@ -3,10 +3,12 @@ import { assets } from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../context/AppContext'
 import axios from 'axios'
+import { AlertContext } from '../context/AlertContext'
 
 const Navbar = () => {
 
     const { authenticatedUser, backendUrl, setIsLoggedin, setAuthenticatedUser } = useContext(AppContext);
+    const { showAlert } = useContext(AlertContext);
     const navigate = useNavigate();
 
     const logout = async () => {
@@ -14,7 +16,7 @@ const Navbar = () => {
       const { data } = await axios.get(backendUrl + '/api/auth/logout');
       await setIsLoggedin(false);
       setAuthenticatedUser(false);
-      alert('logout soccesfull')
+      showAlert("success", "Logout successful");
     }
 
   return (
