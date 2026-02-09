@@ -165,13 +165,14 @@ const sendVerifyOtp = asyncWrap(async (req, res, next) => {
 });
 
 const verifyEmail = asyncWrap(async (req, res, next) => {
-  const { email, otp } = req.body;
+  const { otp } = req.body;
+  const id = req.user._id;
 
-  if (!email || !otp) {
-    return next(new ExpressError("Email and OTP are required", 400));
+  if (!otp) {
+    return next(new ExpressError("OTP is required", 400));
   }
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne(id);
 
   if (!user) {
     return next(new ExpressError("User not found", 404));

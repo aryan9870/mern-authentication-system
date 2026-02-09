@@ -11,12 +11,27 @@ const Navbar = () => {
     const { showAlert } = useContext(AlertContext);
     const navigate = useNavigate();
 
+
+    axios.defaults.withCredentials = true;
+
     const logout = async () => {
-      axios.defaults.withCredentials = true;
       const { data } = await axios.get(backendUrl + '/api/auth/logout');
       await setIsLoggedin(false);
       setAuthenticatedUser(false);
       showAlert("success", "Logout successful");
+    }
+
+    const sendVerifyOtp = async () => {
+      try {
+        const { data } = await axios.get(backendUrl + '/api/auth/send-verify-otp');
+        if(data.success) {
+          showAlert("success", data.message);
+          console.log("otp send");
+          navigate('/email-verify');
+        }
+      } catch (error) {
+        showAlert("danger", error.response.data.message)
+      }
     }
 
   return (
@@ -26,7 +41,7 @@ const Navbar = () => {
           {authenticatedUser.username[0].toUpperCase()}
           <div className='absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-10 w-28'>
             <ul className='list-none m-0 p-2 bg-gray-100 text-sm'>
-              <li className='py-2 px-2 hover:bg-gray-200 cursor-pointer'>Verify email</li>
+              <li onClick={sendVerifyOtp} className='py-2 px-2 hover:bg-gray-200 cursor-pointer'>Verify email</li>
               <li onClick={logout} className='py-2 px-2 hover:bg-gray-200 cursor-pointer pr-10'>Log out</li>
             </ul>
           </div>
