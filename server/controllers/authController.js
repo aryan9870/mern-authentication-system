@@ -124,6 +124,7 @@ const logout = asyncWrap(async (req, res, next) => {
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
     })
     .json({
+      success: true,
       message: "User logged out successfully",
     });
 });
@@ -279,4 +280,12 @@ const resetPassword = asyncWrap(async (req, res, next) => {
 });
 
 
-export { register, login, logout, sendVerifyOtp, verifyEmail, sendResetOtp, resetPassword };
+const isAuthenticated = asyncWrap( async (req, res, next) => {
+  res.status(200).json({
+    success: true,
+    message: "You are allredy logged in",
+  })
+}) 
+
+
+export { register, login, logout, sendVerifyOtp, verifyEmail, sendResetOtp, resetPassword, isAuthenticated };
