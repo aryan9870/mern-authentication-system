@@ -8,7 +8,7 @@ router.post('/login', login);
 router.get('/logout', logout);
 router.get('/send-verify-otp', isLoggedIn, sendVerifyOtp );
 router.post("/verify-account", isLoggedIn, verifyEmail);
-router.get("/send-reset-otp", sendResetOtp);
+router.post("/send-reset-otp", sendResetOtp);
 router.post("/reset-password", resetPassword);
 
 router.get("/is-auth", isLoggedIn, isAuthenticated);
