@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ import { AlertContext } from "../context/AlertContext";
 const EmailVerify = () => {
 
   const navigate = useNavigate()
-  const { backendUrl } = useContext(AppContext);
+  const { backendUrl, isLoggedin, authenticatedUser } = useContext(AppContext);
   const { showAlert } = useContext(AlertContext);
 
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -22,8 +22,29 @@ const EmailVerify = () => {
     if (!/^[0-9]?$/.test(value)) return;
 
     const newOtp = [...otp];
+
+    // 🔥 PASTE CASE
+    if (value.length > 1) {
+      const digits = value.slice(0, 6).split("");
+      digits.forEach((digit, i) => {
+        newOtp[i] = digit;
+    });
+    setOtp(newOtp);
+
+    // last input focus
+    const inputs = e.target.form.querySelectorAll("input");
+    inputs[5]?.focus();
+    return;
+  }
+
     newOtp[index] = value;
     setOtp(newOtp);
+
+    // AUTO NEXT
+    if (value) {
+      const inputs = e.target.form.querySelectorAll("input");
+      inputs[index + 1]?.focus();
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -49,6 +70,17 @@ const EmailVerify = () => {
     }
   };
 
+  const handleKeyDown = (e, index) => {
+  if (e.key === "Backspace" && !otp[index]) {
+    const inputs = e.target.form.querySelectorAll("input");
+    inputs[index - 1]?.focus();
+  }
+  };
+
+  useEffect(() => {
+    isLoggedin && authenticatedUser && authenticatedUser.isVerified && navigate('/');
+  }, [isLoggedin, authenticatedUser])
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-200 to-purple-400">
       <img onClick={() => navigate("/")} src={assets.logo} alt="" className="absolute left-20 top-5 w-32 cursor-pointer"/>
@@ -57,7 +89,7 @@ const EmailVerify = () => {
           <p className="text-center mb-6 text-indigo-300">Enter the 6 digit code sent to your email id.</p>
           <div className="flex justify-between mb-8">
               {otp.map((digit, idx) => {
-                return <input value={digit} onChange={(e) => handleChange(e, idx)} type="text" maxLength='1' key={idx} required className="w-12 h-12 bg-[#333A5C] text-white text-center text-xl rounded-md outline-none"/>
+                return <input value={digit} onChange={(e) => handleChange(e, idx)} onKeyDown={(e) => handleKeyDown(e, idx)} type="text" maxLength='1' key={idx} required className="w-12 h-12 bg-[#333A5C] text-white text-center text-xl rounded-md outline-none"/>
               })}
           </div>
           <button className="w-full py-3 bg-gradient-to-r from-indigo-500 to-indigo-900 rounded-full text-white">Verify email</button>
